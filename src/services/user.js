@@ -1,13 +1,18 @@
-const db = require("../models");
-import { Op } from "sequelize";
+import db from "../models";
+import Sequelize from "sequelize"
 
-exports.userDetail = ({ id }) => {
-  return new Promise((resolve, reject) => {
+exports.findOne = ({ id }) => {
+  return new Promise(async (resolve, reject) => {
     try {
-      const data = db.User.findOne({
+      const data = await db.User.findOne({
         where: { id: id },
-        include: [{ model: Role, require: true }],
-        attribute: ["name", "email", "value"],
+        include: {
+          model: db.Role,
+          attributes: [],
+          as: "roleId"
+        },
+        attributes: ["name", "email", "avatar", [Sequelize.col("roleId.value"), "role"]],
+        raw: true
       });
 
       resolve(data);
@@ -16,3 +21,4 @@ exports.userDetail = ({ id }) => {
     }
   });
 };
+

@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.Role, {
-        foreignKey: "role_code",
-        as: "role_ref",
+        foreignKey: "RoleId",
+        as: "roleId",
       });
     }
   }
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       password: DataTypes.STRING,
       avatar: DataTypes.STRING,
-      role_code: DataTypes.STRING,
+      RoleId: DataTypes.INTEGER
     },
     {
       sequelize,

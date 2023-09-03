@@ -26,3 +26,17 @@ exports.create = ({ code, value }) => {
     }
   });
 };
+
+exports.findAll = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const reponse = await db.Role.findAll({attributes: ["code", "value"]})
+
+      resolve(
+        response(reponse, mes.VIEW_SUCCESSFULY)
+      )
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

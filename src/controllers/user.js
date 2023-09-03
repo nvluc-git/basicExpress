@@ -1,10 +1,8 @@
 import * as services from "../services/user";
-const getUser = (req, res) => {
+exports.getUser = (req, res) => {
   res.send("get user ");
 };
-const userDetail = async (req, res) => {
-  const data = await services.userDetail(req.body);
+exports.findOne = async (req, res) => {
+  const data = await services.findOne(req.params);
   res.send(data);
 };
-
-export default { getUser, userDetail };

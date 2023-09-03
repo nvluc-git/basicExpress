@@ -21,7 +21,7 @@ module.exports = {
       avatar: {
         type: Sequelize.STRING,
       },
-      role_code: {
+      RoleId: {
         type: Sequelize.INTEGER,
         references: {
           model: "Roles",

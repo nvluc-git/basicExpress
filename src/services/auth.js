@@ -1,6 +1,7 @@
 import db from "../models";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { mes, response } from "../config/common";
 
 const hashPassword = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(8));
@@ -8,31 +9,34 @@ const hashPassword = (password) =>
 export const Register = ({ email, password }) =>
   new Promise(async (resolve, reject) => {
     try {
-      const respone = await db.User.findOrCreate({
-        where: { email },
-        defaults: {
-          email,
-          password: hashPassword(password),
-          role_code: 2,
-        },
-      });
-      // console.log(respone[0].email);
-      const token = respone[1]
-        ? jwt.sign(
-            {
-              id: respone[0].id,
-              email: respone[0].email,
-              role_code: respone[0].role_code,
+      let data = { email, password }
+      const checkData = await db.User.findOne({where: {email: email}, raw: true})
+      const role = await db.Role.findOne({where: {code: "USER"}})
+
+      if(checkData){
+        delete data.password
+        resolve(response(data, mes.REGISTER_FAIL))
+        return;
+      }
+      data.password = hashPassword(password)
+      data.RoleId = role.id
+      await db.User.create(data)
+      data.role = role.value
+      const token = 
+         jwt.sign(
+            {          
+              email: data.email,
+              role: role.value,
             },
             process.env.JWT_SECRET,
             { expiresIn: "5d" }
           )
-        : null;
-      resolve({
-        err: respone[1] ? 0 : 1,
-        mess: respone[1] ? "Register is successfully" : "email is used",
-        access_token: token ? `Bearer ${token}` : null,
-      });
+      
+       
+      data.access_token = token
+      delete data.password
+      delete data.Roleid
+      resolve(response(data, mes.REGISTER_SUCCESSFULY));
     } catch (error) {
       reject(error);
     }
@@ -50,7 +54,6 @@ export const Login = ({ email, password }) =>
       const token = isChecked
         ? jwt.sign(
             {
-              id: respone.id,
               email: respone.email,
               role_code: respone.role_code,
             },
