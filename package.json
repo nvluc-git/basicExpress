@@ -2,9 +2,10 @@
   "name": "basicexpress",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "dev": "nodemon index.js --exec babel-node"
+    "dev": "nodemon main.js --exec babel-node",
+    "migration" : "npx sequelize db:migrate"
   },
   "author": "",
   "license": "ISC",

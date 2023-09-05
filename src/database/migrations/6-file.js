@@ -2,21 +2,30 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Roles", {
+    await queryInterface.createTable("Files", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-
-      code: {
-        type: Sequelize.STRING,
+      url: {
+        type: Sequelize.TEXT,
       },
-      value: {
-        type: Sequelize.STRING,
+      name: {
+        type: Sequelize.TEXT,
       },
-
+      status: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1
+      },
+      PostId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Posts",
+          key: "id",
+        },
+      },
       createdAt: {
         allowNull: false,
         type: "TIMESTAMP",

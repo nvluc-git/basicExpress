@@ -1,4 +1,4 @@
-import db from "../models";
+import db from "../database/models";
 import { mes, response } from "../config/common";
 
 exports.create = ({ code, value }) => {
